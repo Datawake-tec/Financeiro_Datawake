@@ -23,6 +23,7 @@ class LoginPlaywright:
             sleep(2)
             page.locator("iframe").content_frame.get_by_role("button", name="Entrar").click()
             sleep(1)
+
             return True
         except Exception as erro_login:
             print(f'{self.name} - Erro login: {erro_login}')
