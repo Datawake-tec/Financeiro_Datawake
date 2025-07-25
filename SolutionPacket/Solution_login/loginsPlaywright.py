@@ -21,6 +21,8 @@ class LoginPlaywright:
             sleep(8)
             page.locator("iframe").content_frame.get_by_role("textbox", name="Grupo").fill("17")
             sleep(2)
+            page.locator("iframe").content_frame.get_by_role("textbox", name="Ambiente").fill("06")
+            sleep(1)
             page.locator("iframe").content_frame.get_by_role("button", name="Entrar").click()
             sleep(1)
 

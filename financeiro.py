@@ -1,4 +1,5 @@
 import os
+import shutil
 from time import sleep
 from SolutionPacket.Solution_login import LoginPlaywright
 from playwright.sync_api import sync_playwright
@@ -6,18 +7,20 @@ from playwright.sync_api import sync_playwright
 
 nome_robo = 'Conta a Pagar - '
 login = LoginPlaywright(nome_robo)
+
 caminho_pasta_robo = os.path.join(os.getcwd(), 'Excel_proteus')
+pasta_arquivo = rf'C:\temp'
 
 
 
 def run_protheus(page_):
     try:
-        sleep(3)
+        sleep(5)
         page_.get_by_text("Consultas (3)").click()
         sleep(2)
         page_.get_by_text("• Posição de Títulos a Pagar").click()
         sleep(1)
-        page_.get_by_role("button", name="Confirmar").click()
+        #page_.get_by_role("button", name="Confirmar").click()
         sleep(9)
 
         try:
@@ -122,21 +125,25 @@ def run_protheus(page_):
             sleep(2)
             # page.locator('xpath=//*[@id="COMP6056"]//select/option[2]').click()
 
-        with page.expect_download() as download_info:
-            page.get_by_role("button", name="Imprimir").click()
-            sleep(30)
-        download = download_info.value
-        download.save_as("planilha_totvs.xlsx")
-        print("Download concluído!")
-            # download = download_info.value
-            # # Salva o arquivo na pasta especificada
-            # file_path = os.path.join(caminho_pasta_robo, download.suggested_filename)
-            # download.save_as(file_path)
+
+        page.get_by_role("button", name="Imprimir").click()
+        sleep(10)
+
+        for arquivo in os.listdir(pasta_arquivo):
+            if arquivo.lower().endswith('.xml'):  # garante que seja .xml
+                origem = os.path.join(pasta_arquivo, arquivo)
+                destino = os.path.join(caminho_pasta_robo, arquivo)
+                shutil.move(origem, destino)
+        shutil.move(pasta_arquivo, caminho_pasta_robo)
+        extracao(pasta_arquivo)
+        print('movi')
 
     except Exception as e:
         print('Erro completo', e)
         return False
 
+def extracao(pasta_arquivo):
+    ...
 
 if __name__ == '__main__':
     with sync_playwright() as p:
